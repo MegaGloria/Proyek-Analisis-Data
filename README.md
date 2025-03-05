@@ -7,7 +7,6 @@ Proyek ini bertujuan untuk menganalisis pola penyewaan sepeda berdasarkan musim,
 ```
 submission/
 │── dashboard/
-│   ├── main_data.csv
 │   ├── dashboard.py
 │── data/
 │   ├── day.csv
