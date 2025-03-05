@@ -53,4 +53,4 @@ Untuk mengunggah ke **Streamlit Cloud**, lakukan langkah berikut:
 4. Tambahkan URL aplikasi ke dalam `url.txt`.
 
 ---
-**Author: [Nama Anda]**
+**Author: Mega Gloria**
