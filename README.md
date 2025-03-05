@@ -34,7 +34,7 @@ submission/
    streamlit run dashboard/dashboard.py
    ```
 5. **Buka di browser**
-   - Streamlit akan berjalan di `https://r7j6fkxsoskctgb4nqpvac.streamlit.app/`
+   - Streamlit akan berjalan di `https://zljrtejsw7qheggkppbdvt.streamlit.app/`
 
 ## 📊 Analisis Data
 - **Bagaimana pola penyewaan sepeda berdasarkan musim dan kondisi cuaca?**
