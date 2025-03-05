@@ -34,7 +34,7 @@ submission/
    streamlit run dashboard/dashboard.py
    ```
 5. **Buka di browser**
-   - Streamlit akan berjalan di `http://localhost:8501/`
+   - Streamlit akan berjalan di `https://r7j6fkxsoskctgb4nqpvac.streamlit.app/`
 
 ## 📊 Analisis Data
 - **Bagaimana pola penyewaan sepeda berdasarkan musim dan kondisi cuaca?**
@@ -44,12 +44,5 @@ submission/
   - Menganalisis jam dengan jumlah penyewaan tertinggi.
   - Visualisasi: **Line Chart**.
 
-## 🚀 Deployment
-Untuk mengunggah ke **Streamlit Cloud**, lakukan langkah berikut:
-1. Buat akun di [Streamlit Cloud](https://share.streamlit.io/).
-2. Push kode ke **GitHub**.
-3. Deploy melalui dashboard Streamlit dengan menghubungkan ke repository GitHub.
-4. Tambahkan URL aplikasi ke dalam `url.txt`.
 
----
 **Author: Mega Gloria**
