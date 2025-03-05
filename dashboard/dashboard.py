@@ -14,6 +14,9 @@ def load_data():
     day_df["season"] = day_df["season"].map({1: "Spring", 2: "Summer", 3: "Fall", 4: "Winter"})
     day_df["weathersit"] = day_df["weathersit"].map({1: "Clear", 2: "Cloudy", 3: "Light Rain/Snow", 4: "Heavy Rain/Snow"})
     
+    # Clustering Penyewaan
+    day_df["usage_category"] = pd.cut(day_df["cnt"], bins=[0, 2000, 4000, day_df["cnt"].max()], labels=["Low Usage", "Moderate Usage", "High Usage"])
+    
     return day_df, hour_df
 
 day_df, hour_df = load_data()
@@ -48,10 +51,10 @@ st.pyplot(fig)
 # Clustering Hari Berdasarkan Penyewaan
 st.subheader("Clustering Hari Berdasarkan Penyewaan")
 fig, ax = plt.subplots(figsize=(8, 4))
-sns.histplot(day_df['cnt'], bins=30, kde=True, ax=ax)
-ax.set_xlabel("Jumlah Penyewaan")
-ax.set_ylabel("Frekuensi")
-ax.set_title("Distribusi Penyewaan Sepeda Harian")
+sns.countplot(data=day_df, x="usage_category", palette="viridis", ax=ax)
+ax.set_xlabel("Kategori Penyewaan")
+ax.set_ylabel("Jumlah Hari")
+ax.set_title("Distribusi Hari Berdasarkan Kategori Penyewaan Sepeda")
 st.pyplot(fig)
 
 # Footer
