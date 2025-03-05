@@ -1,6 +1,7 @@
 import streamlit as st
 import pandas as pd
 import matplotlib.pyplot as plt
+import seaborn as sns
 
 # Load data with error handling
 try:
@@ -56,3 +57,22 @@ if not hour_df.empty:
     st.pyplot(fig2)
 else:
     st.warning("Data per jam tidak tersedia.")
+
+# Analisis Lanjutan: Clustering Hari Berdasarkan Pola Penyewaan
+st.subheader("Analisis Lanjutan: Clustering Hari Berdasarkan Pola Penyewaan")
+
+# Mengelompokkan hari berdasarkan jumlah penyewaan
+day_df["usage_category"] = pd.cut(day_df["cnt"], bins=[0, 2000, 4000, day_df["cnt"].max()], labels=["Low Usage", "Moderate Usage", "High Usage"])
+
+# Visualisasi hasil clustering
+fig3, ax3 = plt.subplots()
+sns.countplot(data=day_df, x="usage_category", palette="viridis", ax=ax3)
+ax3.set_title("Distribusi Hari Berdasarkan Kategori Penyewaan Sepeda")
+ax3.set_xlabel("Kategori Penyewaan")
+ax3.set_ylabel("Jumlah Hari")
+st.pyplot(fig3)
+
+# Insight Clustering
+st.markdown("**Insight:**")
+st.markdown("- Sebagian besar hari termasuk dalam kategori 'Moderate Usage'.")
+st.markdown("- 'High Usage' days terjadi lebih jarang, menandakan ada faktor tertentu yang menyebabkan lonjakan peminjaman.")
