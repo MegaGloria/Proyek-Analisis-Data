@@ -1,1 +1,1 @@
-Tambahkan URL Streamlit Cloud di sini setelah deploy.
+https://r7j6fkxsoskctgb4nqpvac.streamlit.app/
