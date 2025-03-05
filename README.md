@@ -11,7 +11,7 @@ submission/
 │── data/
 │   ├── day.csv
 │   ├── hour.csv
-│── Proyek_Analisis_Data (1).ipynb
+│── Proyek_Analisis_Data.ipynb
 │── README.md
 │── requirements.txt
 │── url.txt
@@ -43,6 +43,8 @@ submission/
 - **Kapan jam sibuk penyewaan sepeda dalam sehari?**
   - Menganalisis jam dengan jumlah penyewaan tertinggi.
   - Visualisasi: **Line Chart**.
-
+- **Bagaimana cara mengelompokkan hari berdasarkan pola penyewaan sepeda?**
+  - Memahami pola hari dengan penggunaan tertinggi dan terendah.
+  - Visualisasi: **Bar Chart**.
 
 **Author: Mega Gloria**
