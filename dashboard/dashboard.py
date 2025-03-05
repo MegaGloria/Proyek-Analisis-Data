@@ -2,13 +2,19 @@ import streamlit as st
 import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
+import os
 
 # Load dataset
 def load_data():
-    day_df = pd.read_csv("data/day.csv")
+    file_path = os.path.join(os.path.dirname(__file__), "../data/day.csv")
+    day_df = pd.read_csv(file_path)
     return day_df
 
 day_df = load_data()
+
+# Mapping Season Names
+season_map = {1: "Spring", 2: "Summer", 3: "Fall", 4: "Winter"}
+day_df["season"] = day_df["season"].map(season_map)
 
 # Dashboard Title
 st.title("📊 Dashboard Penyewaan Sepeda")
@@ -28,22 +34,6 @@ ax.set_xlabel("Musim")
 ax.set_ylabel("Rata-rata Jumlah Penyewaan")
 st.pyplot(fig)
 
-# Visualisasi Penyewaan Berdasarkan Jam
-st.subheader("Pola Penyewaan Sepeda Berdasarkan Jam")
-fig, ax = plt.subplots()
-sns.lineplot(x="hr", y="cnt", data=day_df.groupby("hr").mean().reset_index(), ax=ax)
-ax.set_xlabel("Jam")
-ax.set_ylabel("Rata-rata Penyewaan")
-st.pyplot(fig)
-
-# Insight
-st.subheader("📌 Insight dari Data")
-st.write(
-    "1️⃣ Musim Fall memiliki jumlah penyewaan sepeda tertinggi dibanding musim lainnya.\n"
-    "2️⃣ Penyewaan sepeda meningkat tajam pada jam commuting (07:00-09:00 dan 17:00-19:00).\n"
-    "3️⃣ Tren ini menunjukkan bahwa sepeda digunakan sebagai alat transportasi sehari-hari."
-)
-
-# Footer
-st.markdown("---")
-st.markdown("**Dashboard ini dikembangkan oleh Mega Gloria**")
+# Menampilkan Statistik Dasar
+st.subheader("📈 Statistik Data Penyewaan Sepeda")
+st.write(day_df.describe())
