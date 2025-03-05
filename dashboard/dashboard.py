@@ -2,9 +2,13 @@ import streamlit as st
 import pandas as pd
 import matplotlib.pyplot as plt
 
-# Load data
-day_df = pd.read_csv("data/day.csv")
-hour_df = pd.read_csv("data/hour.csv")
+# Load data with error handling
+try:
+    day_df = pd.read_csv("data/day.csv")
+    hour_df = pd.read_csv("data/hour.csv")
+except FileNotFoundError:
+    st.error("File dataset tidak ditemukan. Pastikan 'day.csv' dan 'hour.csv' sudah diunggah.")
+    st.stop()
 
 # Convert date column to datetime format
 day_df["dteday"] = pd.to_datetime(day_df["dteday"])
@@ -28,21 +32,27 @@ filtered_data = day_df[day_df["season"] == selected_season]
 
 # Visualisasi 1: Penyewaan sepeda berdasarkan cuaca
 st.subheader("Penyewaan Sepeda Berdasarkan Kondisi Cuaca")
-weather_trend = filtered_data.groupby("weathersit")["cnt"].mean()
-fig, ax = plt.subplots()
-weather_trend.plot(kind="bar", ax=ax, color=["blue", "gray", "orange", "red"], alpha=0.7)
-ax.set_xlabel("Kondisi Cuaca")
-ax.set_ylabel("Rata-rata Jumlah Penyewaan")
-ax.set_title("Penyewaan Sepeda per Kondisi Cuaca")
-st.pyplot(fig)
+if not filtered_data.empty:
+    weather_trend = filtered_data.groupby("weathersit")["cnt"].mean()
+    fig, ax = plt.subplots()
+    weather_trend.plot(kind="bar", ax=ax, color=["blue", "gray", "orange", "red"], alpha=0.7)
+    ax.set_xlabel("Kondisi Cuaca")
+    ax.set_ylabel("Rata-rata Jumlah Penyewaan")
+    ax.set_title("Penyewaan Sepeda per Kondisi Cuaca")
+    st.pyplot(fig)
+else:
+    st.warning("Tidak ada data untuk musim yang dipilih.")
 
 # Visualisasi 2: Pola Penyewaan Sepeda per Jam
 st.subheader("Pola Penyewaan Sepeda Berdasarkan Jam")
-hourly_trend = hour_df.groupby("hr")["cnt"].mean()
-fig2, ax2 = plt.subplots()
-ax2.plot(hourly_trend.index, hourly_trend.values, marker="o", linestyle="-", color="b", alpha=0.8)
-ax2.set_xlabel("Jam")
-ax2.set_ylabel("Rata-rata Jumlah Penyewaan")
-ax2.set_title("Pola Penyewaan Sepeda dalam Sehari")
-ax2.grid(axis="y", linestyle="--", alpha=0.7)
-st.pyplot(fig2)
+if not hour_df.empty:
+    hourly_trend = hour_df.groupby("hr")["cnt"].mean()
+    fig2, ax2 = plt.subplots()
+    ax2.plot(hourly_trend.index, hourly_trend.values, marker="o", linestyle="-", color="b", alpha=0.8)
+    ax2.set_xlabel("Jam")
+    ax2.set_ylabel("Rata-rata Jumlah Penyewaan")
+    ax2.set_title("Pola Penyewaan Sepeda dalam Sehari")
+    ax2.grid(axis="y", linestyle="--", alpha=0.7)
+    st.pyplot(fig2)
+else:
+    st.warning("Data per jam tidak tersedia.")
