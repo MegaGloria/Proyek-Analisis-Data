@@ -31,11 +31,12 @@ filtered_data = day_df[day_df["season"] == selected_season]
 
 # Penyewaan Sepeda Berdasarkan Musim dan Cuaca
 st.subheader("Penyewaan Sepeda Berdasarkan Musim dan Cuaca")
-fig, ax = plt.subplots(figsize=(8, 4))
-sns.barplot(data=filtered_data, x="weathersit", y="cnt", estimator=sum, ci=None, ax=ax)
-ax.set_xlabel("Kondisi Cuaca")
+fig, ax = plt.subplots(figsize=(8, 5))
+sns.barplot(data=day_df, x="season", y="cnt", hue="weathersit", estimator=sum, ci=None, ax=ax, palette="viridis")
+ax.set_xlabel("Musim")
 ax.set_ylabel("Total Penyewaan Sepeda")
-ax.set_title(f"Total Penyewaan Sepeda di Musim {selected_season}")
+ax.set_title("Total Penyewaan Sepeda Berdasarkan Musim dan Kondisi Cuaca")
+ax.legend(title="Kondisi Cuaca")
 st.pyplot(fig)
 
 # Jam Sibuk Penyewaan Sepeda
