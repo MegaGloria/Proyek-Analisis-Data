@@ -11,7 +11,7 @@ submission/
 │── data/
 │   ├── day.csv
 │   ├── hour.csv
-│── Proyek_Analisis_Data (1).ipynb
+│── Proyek_Analisis_Data.ipynb
 │── README.md
 │── requirements.txt
 │── url.txt
