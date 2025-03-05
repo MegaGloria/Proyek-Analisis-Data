@@ -4,13 +4,22 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 import os
 
-# Load dataset
+# Load dataset with error handling
 def load_data():
-    file_path = os.path.join(os.path.dirname(__file__), "../data/day.csv")
-    day_df = pd.read_csv(file_path)
-    return day_df
+    try:
+        file_path = os.path.join(os.path.dirname(__file__), "../data/day.csv")
+        if not os.path.exists(file_path):
+            st.error(f"File tidak ditemukan: {file_path}")
+            return None
+        day_df = pd.read_csv(file_path)
+        return day_df
+    except Exception as e:
+        st.error(f"Terjadi kesalahan saat membaca file: {e}")
+        return None
 
 day_df = load_data()
+if day_df is None:
+    st.stop()
 
 # Mapping Season Names
 season_map = {1: "Spring", 2: "Summer", 3: "Fall", 4: "Winter"}
