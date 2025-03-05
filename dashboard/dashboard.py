@@ -3,76 +3,47 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
 
-# Load data with error handling
-try:
+# Load dataset
+def load_data():
     day_df = pd.read_csv("data/day.csv")
-    hour_df = pd.read_csv("data/hour.csv")
-except FileNotFoundError:
-    st.error("File dataset tidak ditemukan. Pastikan 'day.csv' dan 'hour.csv' sudah diunggah.")
-    st.stop()
+    return day_df
 
-# Convert date column to datetime format
-day_df["dteday"] = pd.to_datetime(day_df["dteday"])
-hour_df["dteday"] = pd.to_datetime(hour_df["dteday"])
+day_df = load_data()
 
-# Mapping categorical values
-season_mapping = {1: "Spring", 2: "Summer", 3: "Fall", 4: "Winter"}
-weather_mapping = {1: "Clear", 2: "Cloudy", 3: "Light Rain/Snow", 4: "Heavy Rain/Snow"}
+# Dashboard Title
+st.title("📊 Dashboard Penyewaan Sepeda")
 
-day_df["season"] = day_df["season"].map(season_mapping)
-day_df["weathersit"] = day_df["weathersit"].map(weather_mapping)
+# Sidebar Filters
+st.sidebar.header("Filter Data")
+season_filter = st.sidebar.selectbox("Pilih Musim:", ['All'] + list(day_df['season'].unique()))
 
-# Title
-st.title("Bike Sharing Data Dashboard")
+if season_filter != 'All':
+    day_df = day_df[day_df['season'] == season_filter]
 
-# Sidebar filters
-selected_season = st.sidebar.selectbox("Pilih Musim", day_df["season"].unique())
+# Visualisasi Penyewaan Sepeda Berdasarkan Musim
+st.subheader("Rata-rata Penyewaan Sepeda Berdasarkan Musim")
+fig, ax = plt.subplots()
+sns.barplot(x="season", y="cnt", data=day_df, ci=None, ax=ax)
+ax.set_xlabel("Musim")
+ax.set_ylabel("Rata-rata Jumlah Penyewaan")
+st.pyplot(fig)
 
-# Filter data based on selection
-filtered_data = day_df[day_df["season"] == selected_season]
-
-# Visualisasi 1: Penyewaan sepeda berdasarkan cuaca
-st.subheader("Penyewaan Sepeda Berdasarkan Kondisi Cuaca")
-if not filtered_data.empty:
-    weather_trend = filtered_data.groupby("weathersit")["cnt"].mean()
-    fig, ax = plt.subplots()
-    weather_trend.plot(kind="bar", ax=ax, color=["blue", "gray", "orange", "red"], alpha=0.7)
-    ax.set_xlabel("Kondisi Cuaca")
-    ax.set_ylabel("Rata-rata Jumlah Penyewaan")
-    ax.set_title("Penyewaan Sepeda per Kondisi Cuaca")
-    st.pyplot(fig)
-else:
-    st.warning("Tidak ada data untuk musim yang dipilih.")
-
-# Visualisasi 2: Pola Penyewaan Sepeda per Jam
+# Visualisasi Penyewaan Berdasarkan Jam
 st.subheader("Pola Penyewaan Sepeda Berdasarkan Jam")
-if not hour_df.empty:
-    hourly_trend = hour_df.groupby("hr")["cnt"].mean()
-    fig2, ax2 = plt.subplots()
-    ax2.plot(hourly_trend.index, hourly_trend.values, marker="o", linestyle="-", color="b", alpha=0.8)
-    ax2.set_xlabel("Jam")
-    ax2.set_ylabel("Rata-rata Jumlah Penyewaan")
-    ax2.set_title("Pola Penyewaan Sepeda dalam Sehari")
-    ax2.grid(axis="y", linestyle="--", alpha=0.7)
-    st.pyplot(fig2)
-else:
-    st.warning("Data per jam tidak tersedia.")
+fig, ax = plt.subplots()
+sns.lineplot(x="hr", y="cnt", data=day_df.groupby("hr").mean().reset_index(), ax=ax)
+ax.set_xlabel("Jam")
+ax.set_ylabel("Rata-rata Penyewaan")
+st.pyplot(fig)
 
-# Analisis Lanjutan: Clustering Hari Berdasarkan Pola Penyewaan
-st.subheader("Analisis Lanjutan: Clustering Hari Berdasarkan Pola Penyewaan")
+# Insight
+st.subheader("📌 Insight dari Data")
+st.write(
+    "1️⃣ Musim Fall memiliki jumlah penyewaan sepeda tertinggi dibanding musim lainnya.\n"
+    "2️⃣ Penyewaan sepeda meningkat tajam pada jam commuting (07:00-09:00 dan 17:00-19:00).\n"
+    "3️⃣ Tren ini menunjukkan bahwa sepeda digunakan sebagai alat transportasi sehari-hari."
+)
 
-# Mengelompokkan hari berdasarkan jumlah penyewaan
-day_df["usage_category"] = pd.cut(day_df["cnt"], bins=[0, 2000, 4000, day_df["cnt"].max()], labels=["Low Usage", "Moderate Usage", "High Usage"])
-
-# Visualisasi hasil clustering
-fig3, ax3 = plt.subplots()
-sns.countplot(data=day_df, x="usage_category", palette="viridis", ax=ax3)
-ax3.set_title("Distribusi Hari Berdasarkan Kategori Penyewaan Sepeda")
-ax3.set_xlabel("Kategori Penyewaan")
-ax3.set_ylabel("Jumlah Hari")
-st.pyplot(fig3)
-
-# Insight Clustering
-st.markdown("**Insight:**")
-st.markdown("- Sebagian besar hari termasuk dalam kategori 'Moderate Usage'.")
-st.markdown("- 'High Usage' days terjadi lebih jarang, menandakan ada faktor tertentu yang menyebabkan lonjakan peminjaman.")
+# Footer
+st.markdown("---")
+st.markdown("**Dashboard ini dikembangkan oleh Mega Gloria**")
